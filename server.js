@@ -13,3 +13,7 @@ app.listen(8081, function() {
 }).on('error', err => {
 	console.error(err);
 });
+
+app.get('/api/notes', (req, res) => {
+	res.json(data);
+});
