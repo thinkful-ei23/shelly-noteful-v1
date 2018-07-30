@@ -11,7 +11,8 @@ const app = express();
 app.use(express.static('public'));
 
 app.get('/api/notes', (req, res) => {
-	res.json(data);
+	const sTerm = req.query.searchTerm
+	res.json(data.filter(item => item.title.includes(sTerm)));
 });
 
 app.get('/api/notes/:id', (req, res) => {
