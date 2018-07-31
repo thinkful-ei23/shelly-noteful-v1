@@ -7,6 +7,8 @@ const express = require('express');
 const { PORT } = require('./config');
 //const morgan = require('morgan');
 const data = require('./db/notes');
+const simDB = require('./db/simDB');
+const notes = simDB.initialize(data);
 const app = express();
 
 app.use(express.static('public'));
