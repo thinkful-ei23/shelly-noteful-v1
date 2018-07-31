@@ -13,17 +13,29 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.get('/api/notes', (req, res) => {
-	const sTerm = req.query.searchTerm
-	if (!sTerm) {
-		res.json(data);
-	} else{
-		res.json(data.filter(item => item.title.includes(sTerm)));
-	}	
+app.get('/api/notes', (req, res, next) => {
+	const { searchTerm } = req.query;
+
+	notes.filter(searchTerm, (err, list) => {
+		if (err) {
+			return next(err); 
+		}
+		res.json(list); 
+	});
 });
 
 app.get('/api/notes/:id', (req, res) => {
-	res.json(data.find(item => item.id === Number(req.params.id)));
+	const id = req.params.id;
+	notes.find(id, (err, item) => {
+		if (err) {
+			return next(err);
+		}
+		if (item) {
+			res.json(item);
+		} else {
+			next();
+		}
+	});
 });
 
 app.get('/boom', (req, res, next) => {
