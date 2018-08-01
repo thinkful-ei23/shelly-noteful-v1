@@ -4,8 +4,9 @@
 
 // INSERT EXPRESS APP CODE HERE...
 const express = require('express');
+//this is an object {variable through exports known as PORT} *locally
 const { PORT } = require('./config');
-//const morgan = require('morgan');
+const morgan = require('morgan');
 const data = require('./db/notes');
 const simDB = require('./db/simDB');
 const notes = simDB.initialize(data);
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(morgan('combined'));
 
 app.put('/api/notes/:id', (req, res, next) => {
 	const id = req.params.id;
