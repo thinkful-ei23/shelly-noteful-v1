@@ -7,30 +7,17 @@ const express = require('express');
 //this is an object {variable through exports known as PORT} *locally
 const { PORT } = require('./config');
 const morgan = require('morgan');
-
-const data = require('./db/notes');
-
+//const notesRouter = require('./router/notes.router');
 const app = express();
+const router = require('./router/notes.router.js');
 
 app.use(express.static('public'));
-app.use(express.Router('./router/notes.router.js'));
 app.use(express.json());
-app.use(morgan('combined'));
+app.use(morgan('dev'));
+//from mentor session ==> app.use(morgan('combined'));
 
-
-app.use(function (req, res, next) {
-	let err = new Error('Not Found');
-	err.status = 404;
-	res.status(404).json({ message: 'Not Found' });
-});
-
-app.use(function (err, req, res, next) {
-	res.status(err.status || 500);
-	res.json({
-		message: err.message,
-		error: err
-	});
-});
+app.use(router);
+//app.use('/api', notesRouter);
 
 app.listen(PORT, function() {
 	console.info(`Server listening on ${this.address().port}`);
