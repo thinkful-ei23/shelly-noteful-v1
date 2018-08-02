@@ -3,10 +3,10 @@
 
 const store = (function () {
 
-  return {
-    notes: [],
-    currentNote: false,
-    currentSearchTerm: ''
-  };
+	return {
+		notes: [],
+		currentNote: false,
+		currentSearchTerm: ''
+	};
 
 }());
