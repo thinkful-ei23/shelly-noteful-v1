@@ -47,12 +47,7 @@ const noteful = (function () {
 					console.log(detailsResponse);
 					store.currentNote = detailsResponse;
 					render();
-				})
-			// , detailsResponse => {
-			// 	store.currentNote = detailsResponse;
-			// 	render();
-			// });
-
+				});
 		});
 	}
 
@@ -95,10 +90,7 @@ const noteful = (function () {
 								store.notes = searchResponse;
 								render();
 							});
-					});	
-				// , updateResponse => {
-				// 	store.currentNote = updateResponse;
-						
+					});			
 			} else {
 
 				api.create(noteObj)
@@ -110,15 +102,6 @@ const noteful = (function () {
 								render();
 							});
 					});
-				
-				// , createResponse => {
-				// 	store.currentNote = createResponse;
-				// 	api.search(store.currentSearchTerm)
-				// 		.then(searchResponse => {
-				// 			store.notes = searchResponse;
-				// 			render();
-				// 		});
-
 			}
 
 		});
@@ -139,7 +122,7 @@ const noteful = (function () {
 			event.preventDefault();
 
 			const noteId = getNoteIdFromElement(event.currentTarget);
-
+			
 			api.remove(noteId)
 				.then(() => {
 
