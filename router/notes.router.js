@@ -1,14 +1,12 @@
 const express = require('express');
+//this is a mini-application inside main application
 const router = express.Router();
-
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
 
 const data = require('../db/notes');
 const simDB = require('../db/simDB');
 const notes = simDB.initialize(data);
 
-router.post('/notes', (req,res,next) => {
+router.post('/', (req,res,next) => {
 	const { title, content } = req.body;
 	
 	const newItem = { title, content };
@@ -30,7 +28,7 @@ router.post('/notes', (req,res,next) => {
 	});
 });
 
-router.delete('/notes/:id', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
 	const id = req.params.id;
 
 	notes.delete(id, (err) => {
@@ -41,7 +39,7 @@ router.delete('/notes/:id', (req, res, next) => {
 	});
 });
 
-router.put('/notes/:id', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
 	const id = req.params.id;
 
 	/***** Never trust users - validate input *****/
@@ -66,7 +64,7 @@ router.put('/notes/:id', (req, res, next) => {
 	});
 });
 
-router.get('/notes', (req, res, next) => {
+router.get('/', (req, res, next) => {
 	const { searchTerm } = req.query;
 
 	notes.filter(searchTerm, (err, list) => {
@@ -77,7 +75,7 @@ router.get('/notes', (req, res, next) => {
 	});
 });
 
-router.get('/notes/:id', (req, res) => {
+router.get('/:id', (req, res) => {
 	const id = req.params.id;
 	notes.find(id, (err, item) => {
 		if (err) {
