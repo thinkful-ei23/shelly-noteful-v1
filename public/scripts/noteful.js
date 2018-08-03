@@ -84,23 +84,20 @@ const noteful = (function () {
 				api.update(store.currentNote.id, noteObj)
 					.then(updateResponse => {
 						store.currentNote = updateResponse;
-						
-						api.search(store.currentSearchTerm)
-							.then(searchResponse => {
-								store.notes = searchResponse;
-								render();
-							});
-					});			
+						return api.search(store.currentSearchTerm);
+					}).then(searchResponse => {
+						store.notes = searchResponse;
+						render();
+					});
 			} else {
 
 				api.create(noteObj)
 					.then(createResponse => {
 						store.currentNote = createResponse;
-						api.search(store.currentSearchTerm)
-							.then(searchResponse => {
-								store.notes = searchResponse;
-								render();
-							});
+						return api.search(store.currentSearchTerm);
+					}).then(searchResponse => {
+						store.notes = searchResponse;
+						render();
 					});
 			}
 
@@ -122,16 +119,25 @@ const noteful = (function () {
 			event.preventDefault();
 
 			const noteId = getNoteIdFromElement(event.currentTarget);
-			
-			api.remove(noteId)
-				.then(() => {
+		
+			const removePromise = api.remove(noteId);
+			const searchPromise = api.search(store.currentSearchTerm);
 
-					api.search(store.currentSearchTerm)
-						.then(searchResponse => {
-							store.notes = searchResponse;
-							render();
-						});
+			//race condition = simultaneous
+			Promise.all([removePromise, searchPromise])
+				.then(([removeResponse, searchResponse]) => {
+					store.notes = searchResponse;
+					render();
 				});
+			
+			// api.remove(noteId)
+			// 	.then(() => {
+			// 		return api.search(store.currentSearchTerm);		
+			// 	})
+			// 	.then(searchResponse => {
+			// 		store.notes = searchResponse;
+			// 		render();
+			// 	});
 		});
 	}
 
