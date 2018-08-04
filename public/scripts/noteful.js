@@ -44,7 +44,6 @@ const noteful = (function () {
 
 			api.details(noteId)
 				.then(detailsResponse => {
-					console.log(detailsResponse);
 					store.currentNote = detailsResponse;
 					render();
 				});
@@ -124,20 +123,20 @@ const noteful = (function () {
 			const searchPromise = api.search(store.currentSearchTerm);
 
 			//race condition = simultaneous
-			Promise.all([removePromise, searchPromise])
-				.then(([removeResponse, searchResponse]) => {
-					store.notes = searchResponse;
-					render();
-				});
-			
-			// api.remove(noteId)
-			// 	.then(() => {
-			// 		return api.search(store.currentSearchTerm);		
-			// 	})
-			// 	.then(searchResponse => {
+			// Promise.all([removePromise, searchPromise])
+			// 	.then(([removeResponse, searchResponse]) => {
 			// 		store.notes = searchResponse;
 			// 		render();
 			// 	});
+			
+			api.remove(noteId)
+				.then(() => {
+					return api.search(store.currentSearchTerm);		
+				})
+				.then(searchResponse => {
+					store.notes = searchResponse;
+					render();
+				});
 		});
 	}
 
