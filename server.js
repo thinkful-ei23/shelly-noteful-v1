@@ -1,6 +1,6 @@
 'use strict';
 
-// Load array of notes
+// This is strictly for heroku purposes
 
 // INSERT EXPRESS APP CODE HERE...
 const express = require('express');
